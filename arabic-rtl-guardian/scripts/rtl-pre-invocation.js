@@ -2,11 +2,12 @@
 /**
  * Arabic RTL Guardian: PreInvocation Hook
  * Inspects incoming user input. If Arabic text is detected, injects active BiDi
- * and RTL formatting directives so the assistant's reply is flawlessly aligned.
+ * directives and re-verifies that Antigravity UI has the RTL observer injected.
  */
 
 const readline = require('node:readline');
 const { hasArabic } = require('./rtl-core.js');
+const { runInjection } = require('./rtl-ui-injector.js');
 
 async function main() {
   let inputData = '';
@@ -23,7 +24,12 @@ async function main() {
   const lastUserInput = payload.lastUserInput || '';
 
   if (hasArabic(lastUserInput)) {
-    const reminder = '[ARABIC RTL ACTIVE] تم رصد مدخلات باللغة العربية. احرص على: عزل المصطلحات الإنجليزية بالـ `backticks`، تثبيت علامات الترقيم باليمين عبر RLM (\\u200F)، واستخدام اتجاه RTL في أي ملفات Artifacts.';
+    // Re-verify UI injection
+    try {
+      runInjection().catch(() => {});
+    } catch (_) {}
+
+    const reminder = '[ARABIC RTL ACTIVE] تم رصد مدخلات باللغة العربية. يجب تغليف الرد داخل <div dir="rtl" style="direction: rtl; text-align: right; unicode-bidi: isolate;">، وعزل الكلمات الإنجليزية بالـ `backticks`، وتثبيت علامات الترقيم باليمين عبر RLM (\\u200F).';
     process.stdout.write(JSON.stringify({
       injectSteps: [
         { ephemeralMessage: reminder }
@@ -32,7 +38,6 @@ async function main() {
     return;
   }
 
-  // If no Arabic detected, exit silently with zero overhead
   process.stdout.write(JSON.stringify({ injectSteps: [] }));
 }
 

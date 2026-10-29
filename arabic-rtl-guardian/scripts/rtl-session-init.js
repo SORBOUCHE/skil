@@ -1,11 +1,12 @@
 #!/usr/bin/env node
 /**
  * Arabic RTL Guardian: SessionStart Hook
- * Automatically initializes Arabic typography, BiDi isolation, and RTL directives
- * at the start of every Antigravity session.
+ * Automatically initializes Arabic typography, BiDi isolation, and RTL directives,
+ * and directly injects real-time RTL styles into the Antigravity Chromium UI.
  */
 
 const readline = require('node:readline');
+const { runInjection } = require('./rtl-ui-injector.js');
 
 async function main() {
   let inputData = '';
@@ -14,13 +15,19 @@ async function main() {
     inputData += line;
   }
 
+  // Trigger UI injection asynchronously in background
+  try {
+    runInjection().catch(() => {});
+  } catch (_) {}
+
   const directive = `[ARABIC RTL ACTIVATED]
 حارس اتجاه الخط العربي والطباعة ثنائية الاتجاه (Arabic RTL & BiDi Guardian) مفعل تلقائياً لهذه الجلسة:
-1. عند كتابة أي نص باللغة العربية، يجب عزل أي كلمات إنجليزية أو أسماء متغيرات أو مسارات ملفات أو أوامر داخل علامات التنصيص المائلة (Backticks مثل \`code\`).
-2. علامات الترقيم في نهاية الجمل العربية (مثل . أو ! أو ؟ أو :) يجب أن تلتصق بالكلمة الأخيرة دون مسافة مسبقة، واستخدام علامة اتجاه اليمين لليسار Unicode RLM (\\u200F) عند الحاجة لتثبيتها في جهة اليمين ومنع قفزها لليسار.
-3. عند إنشاء وثائق أو Artifacts تحتوي على نصوص عربية، يجب تغليف الحاوية بوسم:
-   <div dir="rtl" style="direction: rtl; text-align: right; font-family: 'Segoe UI', Tahoma, Arial, sans-serif; unicode-bidi: isolate;">...</div>
-4. الأقواس التي تحيط بكلمات إنجليزية داخل نص عربي يجب أن تحاط بـ RLM لمنع انعكاسها.`;
+1. إجبار محاذاة النص لليمين: يجب تغليف كافة الردود والفقرات باللغة العربية داخل حاوية RTL صريحة:
+   <div dir="rtl" style="direction: rtl; text-align: right; font-family: 'Segoe UI', Tahoma, Arial, sans-serif; unicode-bidi: isolate;">
+   (النص العربي هنا)
+   </div>
+2. عزل المصطلحات اللاتينية والإنجليزية وأسماء المتغيرات والأوامر داخل علامات \`backticks\` دائماً لمنع تشوه الجمل.
+3. تثبيت علامات الترقيم في جهة اليمين عبر Unicode RLM (\\u200F).`;
 
   const payload = {
     injectSteps: [
