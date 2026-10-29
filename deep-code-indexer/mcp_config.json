@@ -1,0 +1,11 @@
+{
+  "mcpServers": {
+    "deep-code-indexer": {
+      "command": "node",
+      "type": "stdio",
+      "args": [
+        "mcp/server.js"
+      ]
+    }
+  }
+}

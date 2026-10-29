@@ -1,0 +1,11 @@
+{
+  "name": "performance-profiler",
+  "displayName": "Performance Profiler",
+  "version": "1.0.0",
+  "description": "Turns Antigravity into a performance engineering expert. Diagnoses and fixes Core Web Vitals (LCP, INP, CLS), backend latency bottlenecks, database query inefficiencies, Node.js memory leaks, and mobile app jank. Adds a pre-deploy bundle size gate to catch regressions before production.",
+  "suggestedPrompts": [
+    "Analyze my frontend bundle, identify what's killing my LCP score and how to fix it",
+    "Profile my Node.js backend and find the memory leak causing OOM crashes in production",
+    "Audit my SQL queries and API response times, then give me a prioritized optimization plan"
+  ]
+}

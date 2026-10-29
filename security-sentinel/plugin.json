@@ -1,0 +1,11 @@
+{
+  "name": "security-sentinel",
+  "displayName": "Security Sentinel & Vulnerability Guard",
+  "version": "1.0.0",
+  "description": "Proactive security auditor and secret leak prevention system. Blocks hardcoded API keys, detects OWASP Top 10 vulnerabilities, audits dependencies for CVEs, and enforces zero-trust security best practices.",
+  "suggestedPrompts": [
+    "Audit my codebase for hardcoded secrets, API keys, and sensitive tokens",
+    "Perform an OWASP Top 10 vulnerability scan across my API routes and data queries",
+    "Audit my package dependencies for known CVE vulnerabilities and recommend safe updates"
+  ]
+}

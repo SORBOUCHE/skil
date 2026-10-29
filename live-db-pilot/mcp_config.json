@@ -1,0 +1,11 @@
+{
+  "mcpServers": {
+    "live-db-pilot": {
+      "command": "node",
+      "type": "stdio",
+      "args": [
+        "mcp/server.js"
+      ]
+    }
+  }
+}

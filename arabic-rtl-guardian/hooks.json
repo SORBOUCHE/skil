@@ -1,0 +1,30 @@
+{
+  "arabic-rtl-guardian": {
+    "SessionStart": [
+      {
+        "type": "command",
+        "command": "node ./scripts/rtl-session-init.js",
+        "timeout": 10
+      }
+    ],
+    "PreInvocation": [
+      {
+        "type": "command",
+        "command": "node ./scripts/rtl-pre-invocation.js",
+        "timeout": 10
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "write_file|edit_file",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node ./scripts/rtl-file-sanitizer.js",
+            "timeout": 10
+          }
+        ]
+      }
+    ]
+  }
+}

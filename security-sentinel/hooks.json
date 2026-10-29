@@ -1,0 +1,16 @@
+{
+  "secret-leak-guard": {
+    "PreToolUse": [
+      {
+        "matcher": "write_to_file",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node hooks/secret-scanner.js",
+            "timeout": 5
+          }
+        ]
+      }
+    ]
+  }
+}

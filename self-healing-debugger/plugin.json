@@ -1,0 +1,11 @@
+{
+  "name": "self-healing-debugger",
+  "displayName": "Self-Healing Debugger & Error Engine",
+  "version": "1.0.0",
+  "description": "Autonomous diagnostic and self-healing engine. Intercepts runtime errors, failed builds, and test crashes, extracts stack traces and error roots, and formulates automated verified patches.",
+  "suggestedPrompts": [
+    "Diagnose this crash stack trace and formulate an automated patch to fix the root cause",
+    "Run tests, analyze all failures, and propose surgical fixes without breaking existing features",
+    "Audit my application for unhandled exception vectors and implement self-healing guardrails"
+  ]
+}

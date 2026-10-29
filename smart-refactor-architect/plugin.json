@@ -1,0 +1,11 @@
+{
+  "name": "smart-refactor-architect",
+  "displayName": "Smart Refactor Architect",
+  "version": "1.0.0",
+  "description": "Autonomous codebase modernization and clean architecture refactoring. Upgrades legacy codebases, converts callbacks to async/await, decouples god-objects into SOLID layers, and eliminates technical debt.",
+  "suggestedPrompts": [
+    "Analyze this legacy module and refactor it into clean hexagonal/layered architecture",
+    "Modernize this codebase to modern ECMAScript/Python standards and eliminate deprecated patterns",
+    "Decouple this god-class into single-responsibility services with dependency injection"
+  ]
+}

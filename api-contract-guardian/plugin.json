@@ -1,0 +1,11 @@
+{
+  "name": "api-contract-guardian",
+  "displayName": "API Contract Guardian & Mock Server",
+  "version": "1.0.0",
+  "description": "Maintains strict API contract integrity between client and server. Generates OpenAPI/Swagger specifications, detects type drift between frontend and backend, and provides instant zero-dependency mock API servers.",
+  "suggestedPrompts": [
+    "Generate an OpenAPI 3.1 specification from my backend route definitions and schemas",
+    "Detect type drift between my frontend TypeScript interfaces and backend API response payloads",
+    "Spin up a local mock server based on my OpenAPI spec so frontend development can proceed"
+  ]
+}

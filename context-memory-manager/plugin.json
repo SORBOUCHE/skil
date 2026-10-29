@@ -1,0 +1,11 @@
+{
+  "name": "context-memory-manager",
+  "displayName": "Context & Memory Manager",
+  "version": "1.0.0",
+  "description": "Gives Antigravity persistent memory about your projects. At every session start, the agent automatically reads PROJECT_CONTEXT.md and workspace architecture notes so it understands your codebase without needing explanations every time.",
+  "suggestedPrompts": [
+    "Analyze my workspace and build a PROJECT_CONTEXT.md memory file for this project",
+    "Update my project knowledge base with the latest architectural decisions we made",
+    "Show me what you know about my current project from memory"
+  ]
+}

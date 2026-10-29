@@ -1,0 +1,11 @@
+{
+  "name": "task-orchestrator",
+  "displayName": "Task Orchestrator & Project Manager",
+  "version": "1.0.0",
+  "description": "Transforms Antigravity into a technical project manager. Decomposes large requirements into executable tasks, tracks progress in TASKS.md, plans parallel subagent execution, and ensures no step is forgotten until the project is done.",
+  "suggestedPrompts": [
+    "Break down this feature into detailed development tasks and create a TASKS.md",
+    "I want to build a full-stack SaaS app — decompose it into parallelizable tasks and assign subagents",
+    "Review my TASKS.md and resume work on the next pending task"
+  ]
+}

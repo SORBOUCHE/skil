@@ -1,0 +1,11 @@
+{
+  "task-reminder": {
+    "PreInvocation": [
+      {
+        "type": "command",
+        "command": "node hooks/task-reminder.js",
+        "timeout": 5
+      }
+    ]
+  }
+}

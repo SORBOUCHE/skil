@@ -1,0 +1,11 @@
+{
+  "context-loader": {
+    "SessionStart": [
+      {
+        "type": "command",
+        "command": "node hooks/load-context.js",
+        "timeout": 10
+      }
+    ]
+  }
+}

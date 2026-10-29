@@ -1,0 +1,12 @@
+{
+  "name": "arabic-rtl-guardian",
+  "displayName": "Arabic RTL & Typography Guardian",
+  "version": "1.1.0",
+  "description": "Automatically corrects Arabic text direction (RTL), prevents trailing punctuation jumping, and enforces bidirectional (BiDi) isolation in Antigravity chat, markdown, and artifacts.",
+  "author": "Antigravity Engineering",
+  "suggestedPrompts": [
+    "صلح اتجاه الخط العربي في المحادثة",
+    "صحح النص العربي المعكوس وعلامات الترقيم",
+    "فعل نمط تصحيح اللغة العربية التلقائي"
+  ]
+}

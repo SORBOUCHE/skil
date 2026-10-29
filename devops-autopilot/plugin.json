@@ -1,0 +1,11 @@
+{
+  "name": "devops-autopilot",
+  "displayName": "DevOps Autopilot",
+  "version": "1.0.0",
+  "description": "Transforms Antigravity into a DevOps engineer. Writes production-grade Dockerfiles and docker-compose files, Kubernetes manifests, Terraform/Pulumi infrastructure-as-code, and sets up monitoring with Prometheus and Grafana. From code to production without a separate DevOps team.",
+  "suggestedPrompts": [
+    "Write a production-ready multi-stage Dockerfile and docker-compose for my project with health checks and security hardening",
+    "Create Kubernetes manifests (Deployment, Service, Ingress, HPA) for my application with resource limits",
+    "Set up Terraform infrastructure for my app on AWS/GCP with VPC, managed database, and auto-scaling"
+  ]
+}

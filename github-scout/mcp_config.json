@@ -1,0 +1,11 @@
+{
+  "mcpServers": {
+    "github-scout": {
+      "command": "node",
+      "type": "stdio",
+      "args": [
+        "mcp/server.js"
+      ]
+    }
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "name": "live-db-pilot",
+  "displayName": "Live DB Pilot & Local Database Explorer",
+  "version": "1.0.0",
+  "description": "Real-time inspection and execution for local databases. Features an embedded zero-dependency SQLite MCP server (using Node.js 22 native node:sqlite), schema introspector, migration verifier, and SQL query optimizer for SQLite, PostgreSQL, and MySQL.",
+  "suggestedPrompts": [
+    "Inspect the schema and list all tables and indexes in my local database file",
+    "Run an EXPLAIN query on this SQL statement and suggest an optimal composite index",
+    "Test this database migration on a temporary cloned database before applying it to production"
+  ]
+}

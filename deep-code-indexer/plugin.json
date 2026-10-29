@@ -1,0 +1,11 @@
+{
+  "name": "deep-code-indexer",
+  "displayName": "Deep Code Indexer & Symbol Graph Memory",
+  "version": "1.0.0",
+  "description": "Hierarchical 3-Tier codebase memory and symbol graph indexer. Parses codebases into an embedded SQLite symbol index (classes, functions, interfaces, imports, and call graphs) enabling instant semantic symbol lookups, impact analysis, and dependency tracking in massive multi-file projects without context saturation.",
+  "suggestedPrompts": [
+    "Index my current workspace codebase and generate a symbol graph of all classes and functions",
+    "Find where the authentication middleware function is defined and list all files that call it",
+    "Analyze the impact of modifying the UserDTO interface across my entire project before refactoring"
+  ]
+}

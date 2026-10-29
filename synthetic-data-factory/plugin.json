@@ -1,0 +1,11 @@
+{
+  "name": "synthetic-data-factory",
+  "displayName": "Synthetic Data & Stress Testing Factory",
+  "version": "1.0.0",
+  "description": "Generates high-fidelity mock datasets, relational fixtures, and realistic synthetic data from schemas (SQL, Prisma, TypeScript, Python). Orchestrates k6 and autocannon stress and load tests.",
+  "suggestedPrompts": [
+    "Generate 1000 realistic relational mock records from my Prisma/SQL database schema",
+    "Create a k6 load testing script to benchmark my API endpoints up to 500 concurrent users",
+    "Generate anonymized synthetic testing fixtures that preserve real data statistical distributions"
+  ]
+}

@@ -1,0 +1,11 @@
+{
+  "name": "ai-agent-toolkit",
+  "displayName": "AI Agent Toolkit",
+  "version": "1.0.0",
+  "description": "Transforms Antigravity into an expert AI systems architect. Covers agent design patterns (ReAct, Plan-Execute, Multi-Agent), RAG pipeline construction, vector database integration, professional prompt engineering, and structured output design.",
+  "suggestedPrompts": [
+    "Design a multi-agent system for my project using the ReAct pattern with tool-use and memory",
+    "Build a production-ready RAG pipeline with chunking, embedding, retrieval and generation",
+    "Write a professional system prompt with few-shot examples and chain-of-thought reasoning"
+  ]
+}
