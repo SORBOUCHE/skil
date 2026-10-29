@@ -1,8 +1,8 @@
 #!/usr/bin/env node
 /**
- * Arabic RTL UI Live Injector (Zero-Dependency Node.js)
- * Connects to the running Antigravity IDE Chromium window via DevTools Protocol
- * and permanently installs an automated RTL observer and stylesheet.
+ * Arabic RTL UI Live Injector with Interactive Toggle Button (Zero-Dependency Node.js)
+ * Injects a sleek floating toggle button into Antigravity's Chromium UI,
+ * allowing instant ON / OFF switching with keyboard shortcut (Alt+R) and state persistence.
  */
 
 const fs = require('fs');
@@ -25,14 +25,15 @@ async function injectRtlIntoPage(wsUrl) {
     ws.onopen = () => {
       const code = `
         (function() {
-          // 1. Inject Global CSS Stylesheet
+          // 1. Prepare Stylesheet
           let style = document.getElementById('antigravity-arabic-rtl-style');
           if (!style) {
             style = document.createElement('style');
             style.id = 'antigravity-arabic-rtl-style';
             document.head.appendChild(style);
           }
-          style.textContent = \`
+
+          const rtlCss = \`
             /* Force RTL on all Arabic text elements */
             [dir="rtl"], .arabic-rtl {
               direction: rtl !important;
@@ -50,33 +51,44 @@ async function injectRtlIntoPage(wsUrl) {
               padding-right: 1.5rem !important;
               padding-left: 0 !important;
             }
+            #antigravity-rtl-toggle-btn:hover {
+              transform: scale(1.05);
+              filter: brightness(1.1);
+            }
+            #antigravity-rtl-toggle-btn:active {
+              transform: scale(0.96);
+            }
           \`;
 
-          // 2. Direct DOM Scanner for existing Arabic elements
           const arabicRe = /[\\u0600-\\u06FF\\u0750-\\u077F\\u08A0-\\u08FF\\uFB50-\\uFDFF\\uFE70-\\uFEFF]/;
-          let count = 0;
 
           function processElement(el) {
             if (!el || el.nodeType !== 1) return;
             const tag = el.tagName;
             if (['SCRIPT', 'STYLE', 'PRE', 'CODE', 'INPUT', 'TEXTAREA'].includes(tag)) return;
+            if (el.id === 'antigravity-rtl-toggle-btn' || el.closest('#antigravity-rtl-toggle-btn')) return;
 
             const text = (el.innerText || el.textContent || '').trim();
             if (arabicRe.test(text.substring(0, 30))) {
               el.setAttribute('dir', 'rtl');
+              el.setAttribute('data-rtl-applied', 'true');
               el.classList.add('arabic-rtl');
               el.style.direction = 'rtl';
               el.style.textAlign = 'right';
               el.style.unicodeBidi = 'isolate';
-              count++;
             }
           }
 
-          document.querySelectorAll('p, li, h1, h2, h3, h4, h5, h6, blockquote, div.prose > *').forEach(processElement);
+          let isRtlActive = localStorage.getItem('antigravity_rtl_enabled') !== 'false'; // Default to ON
 
-          // 3. Install Persistent MutationObserver for real-time streaming chat messages
-          if (!window.__agyArabicRtlObserver) {
+          function enableRtl() {
+            style.textContent = rtlCss;
+            document.querySelectorAll('p, li, h1, h2, h3, h4, h5, h6, blockquote, div.prose > *').forEach(processElement);
+            if (window.__agyArabicRtlObserver) {
+              window.__agyArabicRtlObserver.disconnect();
+            }
             window.__agyArabicRtlObserver = new MutationObserver((mutations) => {
+              if (!isRtlActive) return;
               for (const m of mutations) {
                 for (const node of m.addedNodes) {
                   if (node.nodeType === 1) {
@@ -89,12 +101,97 @@ async function injectRtlIntoPage(wsUrl) {
             window.__agyArabicRtlObserver.observe(document.body, { childList: true, subtree: true });
           }
 
-          return { success: true, count };
+          function disableRtl() {
+            style.textContent = \`
+              #antigravity-rtl-toggle-btn:hover {
+                transform: scale(1.05);
+                filter: brightness(1.1);
+              }
+            \`;
+            if (window.__agyArabicRtlObserver) {
+              window.__agyArabicRtlObserver.disconnect();
+            }
+            document.querySelectorAll('[data-rtl-applied="true"]').forEach(el => {
+              el.removeAttribute('dir');
+              el.classList.remove('arabic-rtl');
+              el.style.direction = '';
+              el.style.textAlign = '';
+              el.style.unicodeBidi = '';
+              el.removeAttribute('data-rtl-applied');
+            });
+          }
+
+          // 2. Create Floating Interactive Toggle Button
+          let btn = document.getElementById('antigravity-rtl-toggle-btn');
+          if (!btn) {
+            btn = document.createElement('button');
+            btn.id = 'antigravity-rtl-toggle-btn';
+            btn.style.cssText = \`
+              position: fixed;
+              top: 8px;
+              right: 80px;
+              z-index: 9999999;
+              display: flex;
+              align-items: center;
+              gap: 6px;
+              padding: 5px 12px;
+              font-size: 11px;
+              font-weight: 600;
+              font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+              border-radius: 9999px;
+              cursor: pointer;
+              box-shadow: 0 4px 14px rgba(0, 0, 0, 0.4);
+              border: 1px solid rgba(255, 255, 255, 0.15);
+              backdrop-filter: blur(8px);
+              transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+              user-select: none;
+            \`;
+            document.body.appendChild(btn);
+
+            btn.onclick = (e) => {
+              e.stopPropagation();
+              isRtlActive = !isRtlActive;
+              localStorage.setItem('antigravity_rtl_enabled', isRtlActive ? 'true' : 'false');
+              updateUI();
+            };
+
+            // Keyboard shortcut Alt+R or Ctrl+Shift+R
+            window.addEventListener('keydown', (e) => {
+              if ((e.altKey && (e.key === 'r' || e.key === 'R' || e.key === 'ق')) ||
+                  (e.ctrlKey && e.shiftKey && (e.key === 'r' || e.key === 'R' || e.key === 'ق'))) {
+                e.preventDefault();
+                isRtlActive = !isRtlActive;
+                localStorage.setItem('antigravity_rtl_enabled', isRtlActive ? 'true' : 'false');
+                updateUI();
+              }
+            });
+          }
+
+          function updateUI() {
+            if (isRtlActive) {
+              btn.style.background = 'linear-gradient(135deg, #059669 0%, #10b981 100%)';
+              btn.style.color = '#ffffff';
+              btn.style.borderColor = 'rgba(52, 211, 153, 0.6)';
+              btn.innerHTML = '<span style="font-size:13px">🌐</span> <span>RTL: مفعّل</span> <kbd style="background:rgba(0,0,0,0.25);padding:1px 5px;border-radius:4px;font-size:9px">Alt+R</kbd>';
+              btn.title = 'محاذاة النص العربي لليمين مفعلة حالياً. انقر لإيقافها [Alt+R]';
+              enableRtl();
+            } else {
+              btn.style.background = 'rgba(30, 41, 59, 0.88)';
+              btn.style.color = '#94a3b8';
+              btn.style.borderColor = 'rgba(148, 163, 184, 0.3)';
+              btn.innerHTML = '<span style="font-size:13px">🌐</span> <span>RTL: معطّل</span> <kbd style="background:rgba(255,255,255,0.1);padding:1px 5px;border-radius:4px;font-size:9px">Alt+R</kbd>';
+              btn.title = 'محاذاة النص العربي معطلة حالياً. انقر لتشغيلها [Alt+R]';
+              disableRtl();
+            }
+          }
+
+          updateUI();
+          return { success: true, isRtlActive };
         })()
       `;
 
       ws.send(JSON.stringify({
-        id: 101,
+        id: 201,
         method: 'Runtime.evaluate',
         params: { expression: code, returnByValue: true }
       }));
@@ -103,7 +200,7 @@ async function injectRtlIntoPage(wsUrl) {
     ws.onmessage = (event) => {
       try {
         const data = JSON.parse(event.data);
-        if (data.id === 101) {
+        if (data.id === 201) {
           clearTimeout(timeout);
           ws.close();
           resolve(data.result?.result?.value || true);
