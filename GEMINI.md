@@ -44,3 +44,13 @@ When given any task under this mode, automatically orchestrate the work through 
 - Provide a clear multi-phase execution roadmap showing which expert plugins are assigned to which parts of the task.
 - Execute with maximum engineering rigor, automated verification, and zero tolerance for sloppy code or unhandled edge cases.
 - **طلب الحفظ على GitHub:** اختتام إنجاز أي أداة أو برنامج بتقديم عرض رسمي ومنظم لحفظ المشروع على GitHub عبر مهارة `github-publisher`.
+
+## 3. Real Machine Program Testing Protocol (بروتوكول تجربة البرامج على الحاسوب الحقيقي)
+عند طلب تجربة أو تشغيل أي برنامج على الحاسوب الفعلي ("جرب البرنامج على الحاسوب"، "شغل الأداة وتأكد منها"، "/test-program"، "/live-test"):
+1. **التشغيل المباشر والمراقبة الحية:** تشغيل الأداة عبر محرك `live-program-tester` (`python .agents/skills/live-program-tester/scripts/live_tester.py`).
+2. **التقرير التشغيلي الشامل (360° Inspection):**
+   - قنوات الإخراج القياسية (`stdout` و `stderr`) وزمن التنفيذ الدقيق.
+   - مؤشرات الأداء الحيوية (استهلاك الذاكرة الأقصى بالميجابايت، ونسبة استهلاك المعالج CPU %).
+   - فحص الشبكة والمنافذ (اكتشاف البورتات المفتوحة `Listening Ports` وفحص استجابة HTTP 200).
+   - رصد انهيارات الويندوز (قراءة سجلات `Windows Event Viewer` لأي خطأ `Application Error` برقم Event ID 1000).
+3. **التصحيح الذاتي التلقائي:** عند رصد أي كود خطأ أو استثناء برمجياً، يتم تمرير التقرير فوراً إلى `self-healing-debugger` وتطبيق التعديل الجراحي عبر `ast-smart-slicer` وإعادة التجربة للتأكد من نجاحها 100%.
