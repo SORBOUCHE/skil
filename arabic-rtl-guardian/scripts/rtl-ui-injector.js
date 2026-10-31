@@ -52,11 +52,12 @@ async function injectRtlIntoPage(wsUrl) {
               padding-left: 0 !important;
             }
             #antigravity-rtl-toggle-btn:hover {
-              transform: scale(1.05);
+              transform: translateX(-50%) scale(1.05);
+              opacity: 1;
               filter: brightness(1.1);
             }
             #antigravity-rtl-toggle-btn:active {
-              transform: scale(0.96);
+              transform: translateX(-50%) scale(0.96);
             }
           \`;
 
@@ -121,31 +122,12 @@ async function injectRtlIntoPage(wsUrl) {
             });
           }
 
-          // 2. Create Floating Interactive Toggle Button
+          // 2. Create or Update Floating Interactive Toggle Button
           let btn = document.getElementById('antigravity-rtl-toggle-btn');
-          if (!btn) {
+          const isNewBtn = !btn;
+          if (isNewBtn) {
             btn = document.createElement('button');
             btn.id = 'antigravity-rtl-toggle-btn';
-            btn.style.cssText = \`
-              position: fixed;
-              top: 8px;
-              right: 80px;
-              z-index: 9999999;
-              display: flex;
-              align-items: center;
-              gap: 6px;
-              padding: 5px 12px;
-              font-size: 11px;
-              font-weight: 600;
-              font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-              border-radius: 9999px;
-              cursor: pointer;
-              box-shadow: 0 4px 14px rgba(0, 0, 0, 0.4);
-              border: 1px solid rgba(255, 255, 255, 0.15);
-              backdrop-filter: blur(8px);
-              transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-              user-select: none;
-            \`;
             document.body.appendChild(btn);
 
             btn.onclick = (e) => {
@@ -167,19 +149,44 @@ async function injectRtlIntoPage(wsUrl) {
             });
           }
 
+          // Compact Centered Styling (Doesn't block top-right update icon)
+          btn.style.cssText = \`
+            position: fixed;
+            top: 6px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 9999999;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            padding: 2px 8px;
+            font-size: 10px;
+            font-weight: 600;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            border-radius: 9999px;
+            cursor: pointer;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.35);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(8px);
+            transition: transform 0.15s ease, background 0.2s ease, opacity 0.2s ease;
+            user-select: none;
+            line-height: 1.2;
+            opacity: 0.88;
+          \`;
+
           function updateUI() {
             if (isRtlActive) {
               btn.style.background = 'linear-gradient(135deg, #059669 0%, #10b981 100%)';
               btn.style.color = '#ffffff';
               btn.style.borderColor = 'rgba(52, 211, 153, 0.6)';
-              btn.innerHTML = '<span style="font-size:13px">🌐</span> <span>RTL: مفعّل</span> <kbd style="background:rgba(0,0,0,0.25);padding:1px 5px;border-radius:4px;font-size:9px">Alt+R</kbd>';
+              btn.innerHTML = '<span style="font-size:11px">🌐</span> <span>RTL</span> <kbd style="background:rgba(0,0,0,0.25);padding:1px 4px;border-radius:3px;font-size:8px">Alt+R</kbd>';
               btn.title = 'محاذاة النص العربي لليمين مفعلة حالياً. انقر لإيقافها [Alt+R]';
               enableRtl();
             } else {
               btn.style.background = 'rgba(30, 41, 59, 0.88)';
               btn.style.color = '#94a3b8';
               btn.style.borderColor = 'rgba(148, 163, 184, 0.3)';
-              btn.innerHTML = '<span style="font-size:13px">🌐</span> <span>RTL: معطّل</span> <kbd style="background:rgba(255,255,255,0.1);padding:1px 5px;border-radius:4px;font-size:9px">Alt+R</kbd>';
+              btn.innerHTML = '<span style="font-size:11px">🌐</span> <span style="opacity:0.7">LTR</span> <kbd style="background:rgba(255,255,255,0.1);padding:1px 4px;border-radius:3px;font-size:8px">Alt+R</kbd>';
               btn.title = 'محاذاة النص العربي معطلة حالياً. انقر لتشغيلها [Alt+R]';
               disableRtl();
             }
