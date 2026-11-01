@@ -67,7 +67,14 @@ Starts the server, tracks its port, and probes `http://127.0.0.1:<port>/`:
 python ".agents/skills/live-program-tester/scripts/live_tester.py" --cmd "python -m uvicorn app:app --port 8000" --daemon --timeout 8
 ```
 
-### 3. Extracting Raw JSON Diagnostic Reports (`--json`)
+### 3. Final Visible CMD Window on Desktop (`--visible` / `--show-cmd`)
+**Strict Rule:** All intermediate operations run silently with zero window popups. Only when development is 100% complete and testing begins, launch with `--visible` to pop up an interactive CMD window on the desktop:
+```bash
+python ".agents/skills/live-program-tester/scripts/live_tester.py" --cmd "python app.py" --visible
+```
+This opens a styled CMD window (`cmd.exe /k`) on the desktop that remains open after execution so the user can see all live outputs, interact with the application, and inspect any errors.
+
+### 4. Extracting Raw JSON Diagnostic Reports (`--json`)
 For programmatic ingestion into automated test pipelines:
 ```bash
 python ".agents/skills/live-program-tester/scripts/live_tester.py" --cmd "npm test" --json

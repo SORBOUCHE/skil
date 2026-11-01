@@ -21,6 +21,9 @@ try:
 except ImportError:
     psutil = None
 
+CREATE_NO_WINDOW = 0x08000000 if sys.platform == 'win32' else 0
+CREATE_NEW_CONSOLE = 0x00000010 if sys.platform == 'win32' else 0
+
 def get_recent_windows_crashes(seconds=30):
     """Queries Windows Event Viewer for Application Errors in the last N seconds."""
     ps_cmd = f"""
@@ -35,8 +38,14 @@ def get_recent_windows_crashes(seconds=30):
     }} | ConvertTo-Json -Compress
     """
     try:
-        res = subprocess.run(["powershell.exe", "-NoProfile", "-Command", ps_cmd],
-                             stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True, timeout=10)
+        res = subprocess.run(
+            ["powershell.exe", "-NoProfile", "-Command", ps_cmd],
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            text=True,
+            timeout=10,
+            creationflags=CREATE_NO_WINDOW
+        )
         output = res.stdout.strip()
         if output:
             try:
@@ -97,9 +106,10 @@ def find_listening_ports(pid):
         pass
     return sorted(list(ports))
 
-def run_program(cmd, cwd=None, timeout=30, is_daemon=False, env=None):
+def run_program(cmd, cwd=None, timeout=30, is_daemon=False, env=None, visible=False):
     """
     Executes a program on the real machine and collects deep diagnostics.
+    If visible=True, launches a dedicated visible CMD console window on the Windows desktop.
     """
     start_time = time.time()
     exec_cwd = os.path.abspath(cwd) if cwd else os.getcwd()
@@ -107,7 +117,53 @@ def run_program(cmd, cwd=None, timeout=30, is_daemon=False, env=None):
     if env:
         run_env.update(env)
 
-    # Launch process
+    # If visible CMD window is requested (final verification stage)
+    if visible and sys.platform == 'win32':
+        sanitized_title = cmd.replace('"', '').replace('&', '').strip()[:35]
+        interactive_cmd = (
+            f'start "Antigravity Live Test - {sanitized_title}" '
+            f'cmd.exe /k "color 0B && title Antigravity Live Test - {sanitized_title} && '
+            f'echo ==================================================================== && '
+            f'echo   [Antigravity Live Program Test - Real Host Execution] && '
+            f'echo   Command: {cmd} && '
+            f'echo ==================================================================== && '
+            f'echo. && {cmd} && echo. && '
+            f'echo ==================================================================== && '
+            f'echo   [Execution Finished - Check logs/errors above or close window] && '
+            f'echo ===================================================================="'
+        )
+        try:
+            subprocess.Popen(
+                interactive_cmd,
+                shell=True,
+                cwd=exec_cwd,
+                env=run_env
+            )
+            return {
+                "status": "VISIBLE_CMD_LAUNCHED",
+                "command": cmd,
+                "cwd": exec_cwd,
+                "duration_seconds": 0.1,
+                "exit_code": 0,
+                "metrics": {
+                    "peak_memory_mb": 0.0,
+                    "peak_cpu_percent": 0.0,
+                    "detected_listening_ports": []
+                },
+                "port_probes": {},
+                "stdout": f"[Visible CMD window launched on desktop for live testing]: {cmd}",
+                "stderr": "",
+                "windows_event_crashes": []
+            }
+        except Exception as e:
+            return {
+                "status": "LAUNCH_FAILED",
+                "command": cmd,
+                "cwd": exec_cwd,
+                "error": str(e)
+            }
+
+    # Standard silent background execution (Zero CMD window popup)
     try:
         proc = subprocess.Popen(
             cmd,
@@ -116,7 +172,8 @@ def run_program(cmd, cwd=None, timeout=30, is_daemon=False, env=None):
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE,
             text=True,
-            env=run_env
+            env=run_env,
+            creationflags=CREATE_NO_WINDOW
         )
     except Exception as e:
         return {
@@ -256,6 +313,7 @@ def main():
     parser.add_argument("--cwd", help="Working directory", default=None)
     parser.add_argument("--timeout", type=int, help="Execution timeout in seconds", default=25)
     parser.add_argument("--daemon", action="store_true", help="Set for long-running servers or background daemons")
+    parser.add_argument("--visible", "--show-cmd", action="store_true", help="Open a real visible CMD window on desktop for final interactive testing and error viewing")
     parser.add_argument("--json", action="store_true", help="Output raw JSON format only")
 
     args, unknown = parser.parse_known_args()
@@ -271,7 +329,8 @@ def main():
         cmd=full_cmd,
         cwd=args.cwd,
         timeout=args.timeout,
-        is_daemon=args.daemon
+        is_daemon=args.daemon,
+        visible=args.visible
     )
 
     if args.json:
