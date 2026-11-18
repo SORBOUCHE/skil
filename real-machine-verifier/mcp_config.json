@@ -1,0 +1,11 @@
+{
+  "mcpServers": {
+    "real-machine-verifier": {
+      "command": "node",
+      "type": "stdio",
+      "args": [
+        "mcp/server.js"
+      ]
+    }
+  }
+}

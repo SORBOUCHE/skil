@@ -1,0 +1,23 @@
+{
+  "real-machine-verifier": {
+    "SessionStart": [
+      {
+        "type": "command",
+        "command": "node ./scripts/verifier-session-init.js",
+        "timeout": 10
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "write_file|edit_file",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node ./scripts/verifier-post-tool.js",
+            "timeout": 10
+          }
+        ]
+      }
+    ]
+  }
+}

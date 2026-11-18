@@ -1,0 +1,13 @@
+{
+  "name": "real-machine-verifier",
+  "displayName": "Real-Machine Verifier & Bare-Metal Diagnostic Engine",
+  "version": "1.0.0",
+  "description": "Autonomous real-world program verification engine that runs, monitors, and stress-tests applications on the real Windows machine after virtual simulation. Captures actual process memory, CPU, exit codes, open TCP ports, and native Windows Event Viewer crash records to eliminate speculative guessing.",
+  "author": "Antigravity Engineering",
+  "suggestedPrompts": [
+    "شغل البرنامج على الحاسوب الحقيقي وافحص الأخطاء بدون تخمين",
+    "تحقق من استقرار التطبيق واستهلاك الذاكرة ومنافذ الشبكة حياً",
+    "افحص سجلات انهيار الويندوز Event Viewer لأي عطل في التطبيق",
+    "افتح نافذة CMD تفاعلية لتجربة البرنامج على سطح المكتب"
+  ]
+}
